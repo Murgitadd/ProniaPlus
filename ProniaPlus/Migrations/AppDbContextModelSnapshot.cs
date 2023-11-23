@@ -22,6 +22,38 @@ namespace ProniaPlus.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("ProniaPlus.Models.Blog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Company")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Blogs");
+                });
+
             modelBuilder.Entity("ProniaPlus.Models.Category", b =>
                 {
                     b.Property<int>("Id")
@@ -32,11 +64,40 @@ namespace ProniaPlus.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("ProniaPlus.Models.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsClient")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Category");
+                    b.ToTable("Clients");
                 });
 
             modelBuilder.Entity("ProniaPlus.Models.Color", b =>
@@ -53,7 +114,7 @@ namespace ProniaPlus.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Color");
+                    b.ToTable("Colors");
                 });
 
             modelBuilder.Entity("ProniaPlus.Models.Product", b =>
@@ -112,7 +173,7 @@ namespace ProniaPlus.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductColor");
+                    b.ToTable("ProductColors");
                 });
 
             modelBuilder.Entity("ProniaPlus.Models.ProductImage", b =>
@@ -141,7 +202,7 @@ namespace ProniaPlus.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImage");
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("ProniaPlus.Models.ProductSize", b =>
@@ -164,7 +225,7 @@ namespace ProniaPlus.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("ProductSize");
+                    b.ToTable("ProductSizes");
                 });
 
             modelBuilder.Entity("ProniaPlus.Models.ProductTag", b =>
@@ -187,7 +248,7 @@ namespace ProniaPlus.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("ProductTag");
+                    b.ToTable("ProductTags");
                 });
 
             modelBuilder.Entity("ProniaPlus.Models.Size", b =>
@@ -204,7 +265,7 @@ namespace ProniaPlus.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Size");
+                    b.ToTable("Sizes");
                 });
 
             modelBuilder.Entity("ProniaPlus.Models.Slide", b =>
@@ -217,7 +278,8 @@ namespace ProniaPlus.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Image")
                         .IsRequired()
@@ -225,11 +287,13 @@ namespace ProniaPlus.Migrations
 
                     b.Property<string>("SubTitle")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Title")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id");
 
@@ -250,13 +314,13 @@ namespace ProniaPlus.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tag");
+                    b.ToTable("Tags");
                 });
 
             modelBuilder.Entity("ProniaPlus.Models.Product", b =>
                 {
                     b.HasOne("ProniaPlus.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -330,6 +394,11 @@ namespace ProniaPlus.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("ProniaPlus.Models.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ProniaPlus.Models.Color", b =>
